@@ -154,6 +154,8 @@ export default function VideoDetail({ params }: VideoPageProps) {
       return
     }
 
+    const resolvedParams = await params
+
     // Get user's collections
     const { data: collectionsData } = await supabase
       .from("collections")
@@ -177,7 +179,7 @@ export default function VideoDetail({ params }: VideoPageProps) {
       .from("collection_videos")
       .insert({
         collection_id: collectionId,
-        video_id: params.id
+        video_id: resolvedParams.id
       })
 
     if (error) {
