@@ -5,9 +5,9 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 interface VideoPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default function VideoDetail({ params }: VideoPageProps) {
@@ -22,6 +22,7 @@ export default function VideoDetail({ params }: VideoPageProps) {
 
   useEffect(() => {
     const fetchVideoData = async () => {
+      const resolvedParams = await params
       const { data: { session } } = await supabase.auth.getSession()
       setUser(session?.user || null)
 
@@ -35,7 +36,7 @@ export default function VideoDetail({ params }: VideoPageProps) {
             email
           )
         `)
-        .eq("id", params.id)
+        .eq("id", resolvedParams.id)
         .single()
 
       if (videoError) {
@@ -56,7 +57,7 @@ export default function VideoDetail({ params }: VideoPageProps) {
             email
           )
         `)
-        .eq("video_id", params.id)
+        .eq("video_id", resolvedParams.id)
         .order("created_at", { ascending: false })
 
       setComments(commentsData || [])
@@ -65,7 +66,7 @@ export default function VideoDetail({ params }: VideoPageProps) {
       const { data: likesData } = await supabase
         .from("video_likes")
         .select("count")
-        .eq("video_id", params.id)
+        .eq("video_id", resolvedParams.id)
 
       setLikes(likesData?.length || 0)
 
@@ -74,7 +75,7 @@ export default function VideoDetail({ params }: VideoPageProps) {
         const { data: userLikeData } = await supabase
           .from("video_likes")
           .select("id")
-          .eq("video_id", params.id)
+          .eq("video_id", resolvedParams.id)
           .eq("user_id", session.user.id)
           .single()
 
@@ -85,7 +86,7 @@ export default function VideoDetail({ params }: VideoPageProps) {
     }
 
     fetchVideoData()
-  }, [params.id, router])
+  }, [params, router])
 
   const handleLike = async () => {
     if (!user) {
@@ -93,12 +94,13 @@ export default function VideoDetail({ params }: VideoPageProps) {
       return
     }
 
+    const resolvedParams = await params
     if (userLiked) {
       // Unlike
       await supabase
         .from("video_likes")
         .delete()
-        .eq("video_id", params.id)
+        .eq("video_id", resolvedParams.id)
         .eq("user_id", user.id)
       
       setLikes(prev => prev - 1)
@@ -108,7 +110,7 @@ export default function VideoDetail({ params }: VideoPageProps) {
       await supabase
         .from("video_likes")
         .insert({
-          video_id: params.id,
+          video_id: resolvedParams.id,
           user_id: user.id
         })
       
@@ -121,10 +123,11 @@ export default function VideoDetail({ params }: VideoPageProps) {
     e.preventDefault()
     if (!user || !commentText.trim()) return
 
+    const resolvedParams = await params
     const { data, error } = await supabase
       .from("video_comments")
       .insert({
-        video_id: params.id,
+        video_id: resolvedParams.id,
         user_id: user.id,
         comment: commentText.trim()
       })

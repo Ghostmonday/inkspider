@@ -8,9 +8,9 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 interface CollectionPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default function CollectionDetail({ params }: CollectionPageProps) {
@@ -21,6 +21,7 @@ export default function CollectionDetail({ params }: CollectionPageProps) {
 
   useEffect(() => {
     const fetchCollection = async () => {
+      const resolvedParams = await params
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
         router.push("/login")
@@ -31,7 +32,7 @@ export default function CollectionDetail({ params }: CollectionPageProps) {
       const { data: collectionData, error: collectionError } = await supabase
         .from("collections")
         .select("*")
-        .eq("id", params.id)
+        .eq("id", resolvedParams.id)
         .eq("user_id", session.user.id)
         .single()
 
@@ -58,7 +59,7 @@ export default function CollectionDetail({ params }: CollectionPageProps) {
             is_public
           )
         `)
-        .eq("collection_id", params.id)
+        .eq("collection_id", resolvedParams.id)
 
       if (videosError) {
         console.error("Error fetching collection videos:", videosError)
@@ -70,15 +71,16 @@ export default function CollectionDetail({ params }: CollectionPageProps) {
     }
 
     fetchCollection()
-  }, [params.id, router])
+  }, [params, router])
 
   const removeVideoFromCollection = async (videoId: string) => {
     if (!confirm("Remove this video from collection?")) return
 
+    const resolvedParams = await params
     const { error } = await supabase
       .from("collection_videos")
       .delete()
-      .eq("collection_id", params.id)
+      .eq("collection_id", resolvedParams.id)
       .eq("video_id", videoId)
 
     if (error) {
@@ -92,10 +94,11 @@ export default function CollectionDetail({ params }: CollectionPageProps) {
     const videoId = prompt("Enter video ID to add:")
     if (!videoId) return
 
+    const resolvedParams = await params
     const { error } = await supabase
       .from("collection_videos")
       .insert({
-        collection_id: params.id,
+        collection_id: resolvedParams.id,
         video_id: videoId
       })
 
@@ -117,7 +120,7 @@ export default function CollectionDetail({ params }: CollectionPageProps) {
             is_public
           )
         `)
-        .eq("collection_id", params.id)
+        .eq("collection_id", resolvedParams.id)
 
       setVideos(videosData?.map(item => item.videos).filter(Boolean) || [])
     }
