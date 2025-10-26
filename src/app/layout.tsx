@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'SpiderInk.art',
-  description: 'Video sharing platform',
+  title: 'DirectorStudio - Professional Video Production Platform',
+  description: 'Complete video production ecosystem for directors, creators, and production teams',
 }
 
 export default function RootLayout({

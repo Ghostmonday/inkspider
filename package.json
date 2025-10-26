@@ -1,7 +1,7 @@
 {
-  "name": "inkspider",
-  "version": "1.0.0",
-  "description": "",
+  "name": "directorstudio",
+  "version": "2.0.0",
+  "description": "Professional video production and project management platform",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
