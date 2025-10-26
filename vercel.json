@@ -1,0 +1,104 @@
+{
+  "version": 2,
+  "name": "spiderink-art",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "NEXT_PUBLIC_APP_ENV": "production"
+  },
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "regions": ["iad1", "sfo1", "lhr1"],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://spiderink.art"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization, X-Client-Signature, X-Client-Version, Idempotency-Key"
+        },
+        {
+          "key": "Access-Control-Max-Age",
+          "value": "86400"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/videos/:id",
+      "destination": "/video/:id",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": "/api/health"
+    },
+    {
+      "source": "/metrics",
+      "destination": "/api/metrics"
+    },
+    {
+      "source": "/ready",
+      "destination": "/api/ready"
+    },
+    {
+      "source": "/live",
+      "destination": "/api/live"
+    }
+  ]
+}

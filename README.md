@@ -1,16 +1,33 @@
-# InkSpider
+# DirectorStudio Ecosystem
 
-A full-stack video sharing platform built with Next.js and Supabase.
+A professional video production and project management platform built with Next.js and Supabase.
+
+Transforming creative vision into reality through intelligent production management.
 
 ## Features
 
-- **User Authentication**: Registration, login, and session management
-- **Video Upload**: Upload MP4 videos with metadata (title, description, tags)
-- **Public Feed**: Browse and view public videos
-- **Video Interactions**: Like, comment, and view videos
-- **User Dashboard**: Manage your videos and view credits
-- **Collections**: Create and manage video collections
-- **Credit System**: Track user credits for video uploads
+### Core Production Management
+- **Project Management**: Organize productions, scenes, and takes
+- **Asset Library**: Advanced media organization with tagging and metadata
+- **Production Pipeline**: Workflow management from pre-production to final delivery
+- **Timeline & Storyboard**: Visual production planning and sequencing
+
+### Team Collaboration
+- **Role-Based Access**: Director, Producer, Editor, Crew permissions
+- **Team Assignments**: Task delegation and progress tracking
+- **Real-time Collaboration**: Share feedback and annotations
+- **Version Control**: Track asset versions and production iterations
+
+### Professional Tools
+- **Credit System**: Production budget and resource allocation
+- **Analytics Dashboard**: Production metrics and insights
+- **Video Interactions**: Reviews, comments, and approvals
+- **Collections**: Organize assets by project, scene, or category
+
+### User Management
+- **Authentication**: Secure registration and session management
+- **User Profiles**: Role-based profiles with production history
+- **Dashboard**: Centralized production control center
 
 ## Tech Stack
 
@@ -30,8 +47,8 @@ A full-stack video sharing platform built with Next.js and Supabase.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/inkspider.git
-cd inkspider
+git clone https://github.com/yourusername/directorstudio.git
+cd directorstudio
 ```
 
 2. Install dependencies:

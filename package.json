@@ -1,7 +1,7 @@
 {
-  "name": "inkspider",
-  "version": "1.0.0",
-  "description": "",
+  "name": "directorstudio",
+  "version": "2.0.0",
+  "description": "Professional video production and project management platform",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
@@ -23,6 +23,9 @@
     "@types/node": "^24.9.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.33"
   }
 }
