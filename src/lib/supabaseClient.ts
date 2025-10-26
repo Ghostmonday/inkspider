@@ -3,8 +3,9 @@ import { createClient } from "@supabase/supabase-js"
 // Validate environment variables with fallbacks for build time
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co"
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key"
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-service-key"
 
-// Create Supabase client with enhanced configuration
+// Create Supabase client for client-side usage (RLS enforced)
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
@@ -18,7 +19,21 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'X-Client-Info': 'inkspider-web'
+      'X-Client-Info': 'directorstudio-web'
+    }
+  }
+})
+
+// Create Supabase client for server-side usage (bypasses RLS)
+// NEVER import this in client components!
+export const supabaseServer = createClient(supabaseUrl, supabaseServiceRoleKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'directorstudio-server'
     }
   }
 })
